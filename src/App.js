@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import api from './services/api';
 
+import Icon from 'react-native-vector-icons/MaterialIcons'
+
 import {
   SafeAreaView,
   View,
@@ -27,8 +29,6 @@ export default function App() {
 
     const response = await api.post(`repositories/${id}/like`);
 
-    const index = repositories.findIndex(repo => repo.id === id)
-
     setRepositories(repositories.map(repo => {
       if (repo.id === id) {
         return repo = response.data
@@ -44,44 +44,45 @@ export default function App() {
 
         <FlatList
           data={repositories}
-          keyExtractor={repo => repo.id}
-          renderItem={({ item: repo }) => (
+          keyExtractor={repository => repository.id}
+          renderItem={({ item: repository }) => (
 
             <View style={styles.repositoryContainer}>
-              <Text style={styles.repository}> {repo.title} </Text>
+              <Text style={styles.repository}> {repository.title} </Text>
 
               <View style={styles.techsContainer}>
                 <Text style={styles.tech}>
                   ReactJS
-            </Text>
+                </Text>
                 <Text style={styles.tech}>
                   Node.js
-            </Text>
+                </Text>
               </View>
 
               <View style={styles.likesContainer}>
                 <Text
                   style={styles.likeText}
-                  testID={`repository-likes-${repo.id}`}
+                  testID={`repository-likes-${repository.id}`}
                 >
-                  {repo.likes} curtidas
+                  {repository.likes} curtidas
             </Text>
               </View>
 
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleLikeRepository(repo.id)}
-                // Remember to replace "1" below with repository ID: {`like-button-${repository.id}`}
-                testID={`like-button-1`}
+                onPress={() => handleLikeRepository(repository.id)}
+                testID={`like-button-${repository.id}`}
               >
-                <Text style={styles.buttonText}>Curtir</Text>
+                <Text style={styles.buttonText}>
+                  Curtir
+                  </Text>
+                  <Icon name="thumb-up" color="#eee" size={25} />
               </TouchableOpacity>
             </View>
 
           )}
 
         />
-
 
       </SafeAreaView>
     </>
@@ -98,10 +99,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     backgroundColor: "#fff",
     padding: 20,
+    borderRadius: 15
   },
   repository: {
     fontSize: 32,
     fontWeight: "bold",
+    color: '#222'
   },
   techsContainer: {
     flexDirection: "row",
@@ -115,6 +118,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     color: "#fff",
+    borderRadius: 5
   },
   likesContainer: {
     marginTop: 15,
@@ -128,13 +132,18 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: 120,
+    borderRadius: 15,
+    backgroundColor: "#7159c1",
   },
   buttonText: {
     fontSize: 14,
     fontWeight: "bold",
-    marginRight: 10,
+    marginRight: 0,
     color: "#fff",
-    backgroundColor: "#7159c1",
     padding: 15,
   },
 });
