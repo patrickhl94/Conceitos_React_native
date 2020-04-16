@@ -17,6 +17,7 @@ import {
 export default function App() {
 
   const [repositories, setRepositories] = useState([]);
+  const [techs, setTechs] = useState(['JAVA', 'PYTON', 'NODE']);
 
   useEffect(() => {
     api.get('repositories').then(response => {
@@ -43,6 +44,7 @@ export default function App() {
       <SafeAreaView style={styles.container}>
 
         <FlatList
+          style={styles.list}
           data={repositories}
           keyExtractor={repository => repository.id}
           renderItem={({ item: repository }) => (
@@ -51,12 +53,13 @@ export default function App() {
               <Text style={styles.repository}> {repository.title} </Text>
 
               <View style={styles.techsContainer}>
-                <Text style={styles.tech}>
-                  ReactJS
-                </Text>
-                <Text style={styles.tech}>
-                  Node.js
-                </Text>
+                {
+                  (repository.techs).map(tech => (
+                    <Text key={tech} style={styles.tech}>
+                      {tech}
+                    </Text>
+                  ))
+                }
               </View>
 
               <View style={styles.likesContainer}>
@@ -69,6 +72,7 @@ export default function App() {
               </View>
 
               <TouchableOpacity
+                activeOpacity={0.7}
                 style={styles.button}
                 onPress={() => handleLikeRepository(repository.id)}
                 testID={`like-button-${repository.id}`}
@@ -76,7 +80,7 @@ export default function App() {
                 <Text style={styles.buttonText}>
                   Curtir
                   </Text>
-                  <Icon name="thumb-up" color="#eee" size={25} />
+                <Icon style={styles.icon} name="thumb-up" color="#eee" size={25} />
               </TouchableOpacity>
             </View>
 
@@ -109,13 +113,16 @@ const styles = StyleSheet.create({
   techsContainer: {
     flexDirection: "row",
     marginTop: 10,
+    flex: 1,
+    flexWrap: "wrap"
   },
   tech: {
     fontSize: 12,
     fontWeight: "bold",
-    marginRight: 10,
+    marginHorizontal: 5,
+    marginVertical: 5,
     backgroundColor: "#04d361",
-    paddingHorizontal: 10,
+    paddingHorizontal: 5,
     paddingVertical: 5,
     color: "#fff",
     borderRadius: 5
@@ -139,6 +146,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: "#7159c1",
   },
+
+  icon: {
+    marginLeft: -7
+  },
+
   buttonText: {
     fontSize: 14,
     fontWeight: "bold",
@@ -146,4 +158,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     padding: 15,
   },
+
+  list: {
+    paddingTop: 15
+  }
 });
